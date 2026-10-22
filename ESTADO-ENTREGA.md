@@ -97,6 +97,7 @@ Estos ítems **no bloquean** la entrega por Git ni la demo local, pero no están
 
 ## Referencias rápidas
 
+- Guía post-clon: [GUIA-CLON.md](./GUIA-CLON.md)  
 - Prueba local detallada: [README.md](./README.md#cómo-probar-en-local)  
 - Planteamiento y trade-offs: [SOLUCION.md](./SOLUCION.md)  
 - Requisitos originales: [PRD.md](./PRD.md)
