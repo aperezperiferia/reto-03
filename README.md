@@ -127,6 +127,8 @@ curl -X POST http://localhost:3001/api/chat `
 
 ## Entrega (Git)
 
+Repositorio: **https://github.com/aperezperiferia/reto-03**
+
 Esta entrega se publica **solo en Git**, sin URL desplegada. El evaluador clona el repo y sigue [Cómo probar en local](#cómo-probar-en-local).
 
 **Resumen de alcance, ítems pendientes y penalización por link público:** ver [ESTADO-ENTREGA.md](./ESTADO-ENTREGA.md).

@@ -21,7 +21,7 @@ Están listados en `.gitignore`.
 ### Pasos para quien evalúa el repo
 
 ```powershell
-git clone <url-del-repo>
+git clone https://github.com/aperezperiferia/reto-03.git
 cd reto-03
 npm install
 npm run demo
