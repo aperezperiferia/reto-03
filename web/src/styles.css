@@ -1,0 +1,130 @@
+:root {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  color: #0f172a;
+  background: #f1f5f9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+header {
+  margin-bottom: 1rem;
+}
+
+header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.35rem;
+}
+
+header p {
+  margin: 0;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+.chat {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.msg {
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  max-width: 92%;
+  white-space: pre-wrap;
+  line-height: 1.45;
+}
+
+.msg.user {
+  align-self: flex-end;
+  background: #2563eb;
+  color: #fff;
+}
+
+.msg.assistant {
+  align-self: flex-start;
+  background: #e2e8f0;
+}
+
+.msg.confirm {
+  border: 2px solid #f59e0b;
+  background: #fffbeb;
+}
+
+.tool-block {
+  align-self: stretch;
+  font-size: 0.82rem;
+  border-left: 3px solid #64748b;
+  padding-left: 0.6rem;
+  color: #334155;
+}
+
+.tool-block strong {
+  color: #0f172a;
+}
+
+.composer {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.composer input {
+  flex: 1;
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #94a3b8;
+  font-size: 1rem;
+}
+
+.composer button {
+  padding: 0.65rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #0f766e;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.composer button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.badge {
+  display: inline-block;
+  background: #fef3c7;
+  color: #92400e;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  margin-left: 0.5rem;
+}
+
+.thinking {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-style: italic;
+}
