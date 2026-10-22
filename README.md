@@ -2,6 +2,8 @@
 
 Aplicación full-stack (chat + backend + herramientas tipadas) que automatiza lectura del paquete de compra, validaciones RC1–RC10, payload SAP, evidencia de aprobación y creación en SAP simulado.
 
+**¿Acabas de clonar?** → [GUIA-CLON.md](./GUIA-CLON.md)
+
 ## Requisitos
 
 - Node.js 20+ (probado con Node 22)
