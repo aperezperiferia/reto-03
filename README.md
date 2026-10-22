@@ -28,7 +28,14 @@ npm install
 cp .env.example .env
 ```
 
-Opcional: edita `.env` y agrega `OPENAI_API_KEY=sk-...` si vas a usar el chat. No subas `.env` al repositorio.
+Para el chat, crea `.env` en la **raíz del proyecto** (junto a `package.json`):
+
+```env
+OPENAI_API_KEY=sk-tu-clave-aqui
+OPENAI_MODEL=gpt-4o-mini
+```
+
+Reinicia `npm run dev` después de guardar `.env`. No subas `.env` a Git.
 
 ### 2. Prueba rápida sin modelo (recomendado para evaluar controles)
 
@@ -119,7 +126,7 @@ curl -X POST http://localhost:3001/api/chat `
 | Síntoma | Qué revisar |
 |---------|-------------|
 | Chat: "No pude conectar con el backend" | ¿Corre `npm run dev`? Puerto 3001 libre |
-| Chat: error 503 / LLM | `OPENAI_API_KEY` en `.env`, reinicia `npm run dev` |
+| Chat: error 503 / `OPENAI_API_KEY no configurada` | Archivo `.env` en la raíz con `OPENAI_API_KEY=sk-...`; `npm install` (usa `dotenv`); **reinicia** `npm run dev` |
 | Demo distinto entre ejecuciones | Normal si no borras `out/`; el demo **siempre** limpia `out/` al inicio |
 | Puertos ocupados | Cambia `PORT` en `.env` y el proxy en `web/vite.config.ts` |
 | `npm.ps1` / ejecución de scripts deshabilitada (Windows) | Usa `npm.cmd run dev` o abre **cmd** en lugar de PowerShell |

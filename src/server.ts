@@ -1,3 +1,4 @@
+import { config as loadEnv } from "dotenv";
 import express from "express";
 import cors from "cors";
 import { fileURLToPath } from "node:url";
@@ -15,6 +16,8 @@ import {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = join(__dirname, "..");
+
+loadEnv({ path: join(ROOT, ".env") });
 
 function getLlm(): LlmAdapter {
   return createOpenAiAdapter();
