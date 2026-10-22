@@ -5,8 +5,9 @@ Aplicación full-stack (chat + backend + herramientas tipadas) que automatiza le
 ## Requisitos
 
 - Node.js 20+ (probado con Node 22)
-- Para el **chat con IA**: clave OpenAI solo en el backend (`OPENAI_API_KEY` en `.env`)
-- Para **validar reglas de negocio sin IA**: no hace falta ninguna clave
+- **Chat sin OpenAI:** modo `mock` (por defecto si `OPENAI_API_KEY` está vacía)
+- **Chat con IA real:** `OPENAI_API_KEY=sk-...` en `.env` (ver [OpenAI vs mock](#openai-vs-mock-chat))
+- **Reglas de negocio sin chat:** `npm run demo` (no usa LLM)
 
 ## Cómo probar en local
 
@@ -28,14 +29,26 @@ npm install
 cp .env.example .env
 ```
 
-Para el chat, crea `.env` en la **raíz del proyecto** (junto a `package.json`):
+Crea `.env` en la **raíz del proyecto** (junto a `package.json`). Puedes copiar `.env.example`:
 
-```env
-OPENAI_API_KEY=sk-tu-clave-aqui
-OPENAI_MODEL=gpt-4o-mini
+```powershell
+copy .env.example .env
 ```
 
-Reinicia `npm run dev` después de guardar `.env`. No subas `.env` a Git.
+Reinicia `npm run dev` después de editar `.env`. **No subas `.env` a Git.**
+
+### OpenAI vs mock (chat)
+
+| Modo | Cuándo usar | Configuración en `.env` |
+|------|-------------|-------------------------|
+| **mock** | Demo/defensa **sin** cuenta OpenAI; mismas herramientas, respuestas scripteadas | `LLM_PROVIDER=mock` y `OPENAI_API_KEY` vacía (o sin definir clave) |
+| **openai** | Chat con modelo real (PRD producción) | `LLM_PROVIDER=openai` y `OPENAI_API_KEY=sk-...` **con valor real** |
+
+**Error frecuente:** dejar `OPENAI_API_KEY=` vacío **y** `LLM_PROVIDER=openai`. Eso fuerza OpenAI sin clave y verás *OPENAI_API_KEY no configurada*. Solución: usa `LLM_PROVIDER=mock` o pega una clave `sk-...`.
+
+Comprueba el modo activo: http://localhost:3001/api/health → `"mode": "mock"` o `"openai"`, y `"openaiConfigured": true/false`.
+
+En **mock**, escribe en el chat mensajes que incluyan el caso, p. ej. `Procesa sol-001`. Para confirmaciones: `confirmo` en un segundo mensaje.
 
 ### 2. Prueba rápida sin modelo (recomendado para evaluar controles)
 
@@ -64,9 +77,9 @@ npm run demo
 - `out/sap/ordenes.jsonl` — órdenes en el SAP simulado
 - `out/sol-001/aprobacion.txt`, `trazabilidad.json`, etc.
 
-### 3. Prueba del chat (agente + LLM)
+### 3. Prueba del chat (mock u OpenAI)
 
-1. Configura `OPENAI_API_KEY` en `.env`.
+1. Ajusta `.env` ([OpenAI vs mock](#openai-vs-mock-chat)): para empezar rápido, `LLM_PROVIDER=mock` sin clave.
 2. Levanta front y API con un solo comando:
 
 ```powershell
@@ -126,7 +139,7 @@ curl -X POST http://localhost:3001/api/chat `
 | Síntoma | Qué revisar |
 |---------|-------------|
 | Chat: "No pude conectar con el backend" | ¿Corre `npm run dev`? Puerto 3001 libre |
-| Chat: error 503 / `OPENAI_API_KEY no configurada` | Archivo `.env` en la raíz con `OPENAI_API_KEY=sk-...`; `npm install` (usa `dotenv`); **reinicia** `npm run dev` |
+| Chat: error 503 / `OPENAI_API_KEY no configurada` | Clave **vacía** con `LLM_PROVIDER=openai` → cambia a `LLM_PROVIDER=mock` **o** pega `OPENAI_API_KEY=sk-...`; reinicia `npm run dev` |
 | Demo distinto entre ejecuciones | Normal si no borras `out/`; el demo **siempre** limpia `out/` al inicio |
 | Puertos ocupados | Cambia `PORT` en `.env` y el proxy en `web/vite.config.ts` |
 | `npm.ps1` / ejecución de scripts deshabilitada (Windows) | Usa `npm.cmd run dev` o abre **cmd** en lugar de PowerShell |
@@ -157,7 +170,8 @@ npm run dev
 
 | Variable | Descripción |
 |----------|-------------|
-| `OPENAI_API_KEY` | Clave del proveedor (solo servidor) |
+| `LLM_PROVIDER` | `mock` (sin clave) o `openai` (requiere clave) |
+| `OPENAI_API_KEY` | Clave `sk-...` solo si usas OpenAI; **no dejar vacía con `LLM_PROVIDER=openai`** |
 | `OPENAI_MODEL` | Modelo (default `gpt-4o-mini`) |
 | `AGENT_MAX_ITERATIONS` | Tope de ciclo herramienta↔modelo (default 25) |
 | `LLM_TIMEOUT_MS` | Timeout al proveedor |

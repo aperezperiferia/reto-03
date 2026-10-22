@@ -8,7 +8,7 @@ Documento de cierre para evaluadores: qué se entrega, cómo probarlo y qué que
 |---------|----------|
 | **Medio** | Repositorio Git (historial de commits). No se entrega zip salvo que lo pida el proceso. |
 | **Link público** | **No incluido.** El PRD permite demo en local durante la defensa con penalización de **−10 puntos** (sección 9.3). |
-| **Demo en defensa** | Clonar repo → `npm install` → `npm run demo` (sin API key) y/o `npm run dev` + chat en http://localhost:5173 (con `OPENAI_API_KEY` en `.env` local). |
+| **Demo en defensa** | Clonar → `npm install` → `npm run demo` **o** chat con `LLM_PROVIDER=mock` (sin OpenAI). Ver README *OpenAI vs mock*. |
 
 ### Qué no debe subirse a Git
 
@@ -27,12 +27,19 @@ npm install
 npm run demo
 ```
 
-Opcional (chat con LLM):
+Chat sin OpenAI (mock):
 
 ```powershell
 copy .env.example .env
-# Editar .env: OPENAI_API_KEY=...
-npm run dev
+# .env: LLM_PROVIDER=mock y OPENAI_API_KEY vacía
+npm.cmd run dev
+```
+
+Chat con OpenAI real:
+
+```powershell
+# .env: LLM_PROVIDER=openai y OPENAI_API_KEY=sk-... (con valor, no vacío)
+npm.cmd run dev
 ```
 
 Abrir **http://localhost:5173** (no http://localhost:3001 — la API no sirve la UI en `/`).

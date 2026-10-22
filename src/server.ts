@@ -4,7 +4,7 @@ import cors from "cors";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { runAgentTurn } from "./agent/runner.js";
-import { createOpenAiAdapter } from "./llm/openai.js";
+import { createLlmAdapter, llmConfiguredLabel } from "./llm/factory.js";
 import type { LlmAdapter } from "./llm/adapter.js";
 import {
   createSession,
@@ -18,16 +18,19 @@ const __dirname = dirname(__filename);
 const ROOT = join(__dirname, "..");
 
 const envLoad = loadEnv({ path: join(ROOT, ".env") });
-if (!process.env.OPENAI_API_KEY?.trim()) {
-  console.warn(
-    "[api] OPENAI_API_KEY vacía o ausente en .env — el chat fallará hasta que agregues tu clave y reinicies.",
-  );
-} else if (envLoad.error) {
+const llmProvider = (process.env.LLM_PROVIDER ?? "").trim().toLowerCase();
+if (envLoad.error) {
   console.warn("[api] No se pudo leer .env:", envLoad.error.message);
+} else if (llmProvider === "openai" && !process.env.OPENAI_API_KEY?.trim()) {
+  console.warn(
+    "[api] LLM_PROVIDER=openai pero OPENAI_API_KEY está vacía. Pon tu clave sk-... en .env o usa LLM_PROVIDER=mock.",
+  );
+} else if (!process.env.OPENAI_API_KEY?.trim() && llmProvider !== "openai") {
+  console.warn("[api] Chat en modo mock (sin OpenAI). Para IA real: OPENAI_API_KEY=sk-... y LLM_PROVIDER=openai");
 }
 
 function getLlm(): LlmAdapter {
-  return createOpenAiAdapter();
+  return createLlmAdapter();
 }
 
 const app = express();
@@ -36,14 +39,18 @@ app.use(express.json({ limit: "2mb" }));
 
 app.get("/api/health", (_req, res) => {
   try {
-    const llm = getLlm();
-    res.json({ ok: true, provider: llm.provider, model: llm.model });
-  } catch {
+    const info = llmConfiguredLabel();
     res.json({
       ok: true,
-      provider: "openai",
-      model: process.env.OPENAI_MODEL ?? "gpt-4o-mini",
-      configured: Boolean(process.env.OPENAI_API_KEY),
+      provider: info.provider,
+      model: info.model,
+      mode: info.mode,
+      openaiConfigured: Boolean(process.env.OPENAI_API_KEY?.trim()),
+    });
+  } catch (e) {
+    res.status(503).json({
+      ok: false,
+      error: e instanceof Error ? e.message : "LLM no disponible",
     });
   }
 });

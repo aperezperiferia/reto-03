@@ -29,10 +29,15 @@ export function App() {
   useEffect(() => {
     fetch("/api/health")
       .then((r) => r.json())
-      .then((d: { provider: string; model: string; configured?: boolean }) => {
-        setHealth(
-          `${d.provider} / ${d.model}${d.configured === false ? " (sin API key)" : ""}`,
-        );
+      .then((d: { provider: string; model: string; mode?: string; openaiConfigured?: boolean }) => {
+        const mode = d.mode ?? d.provider;
+        const hint =
+          mode === "mock"
+            ? " (mock, sin OpenAI)"
+            : d.openaiConfigured === false
+              ? " (OpenAI sin clave)"
+              : "";
+        setHealth(`${d.provider} / ${d.model}${hint}`);
       })
       .catch(() => setHealth("API no disponible"));
   }, []);

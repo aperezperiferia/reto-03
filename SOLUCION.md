@@ -26,9 +26,9 @@ Bucle con tope `AGENT_MAX_ITERATIONS` (25): modelo → tool calls → resultados
 
 ## 4. Elección del modelo
 
-- **Proveedor**: OpenAI  
+- **Proveedor**: OpenAI (`LLM_PROVIDER=openai`) o **mock local** (`LLM_PROVIDER=mock`) para demo sin clave.  
 - **Modelo**: `gpt-4o-mini` (balance costo/calidad para tool calling)  
-- **Costo estimado por caso**: ~2–4k tokens → USD 0.001–0.003 por solicitud (orden de magnitud).
+- **Costo estimado por caso**: ~2–4k tokens → USD 0.001–0.003 por solicitud (orden de magnitud). Mock: costo cero.
 
 ## 5. Matriz de controles
 
