@@ -2,9 +2,11 @@ import OpenAI from "openai";
 import type { ChatMessage, LlmAdapter, LlmResponse, LlmToolDefinition } from "./adapter.js";
 
 export function createOpenAiAdapter(): LlmAdapter {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY?.trim();
   if (!apiKey) {
-    throw new Error("OPENAI_API_KEY no configurada en el entorno del backend.");
+    throw new Error(
+      "OPENAI_API_KEY no configurada: edita el archivo .env en la raíz del proyecto y asigna tu clave (OPENAI_API_KEY=sk-...). Luego reinicia npm run dev.",
+    );
   }
   const model = process.env.OPENAI_MODEL ?? "gpt-4o-mini";
   const client = new OpenAI({ apiKey, timeout: Number(process.env.LLM_TIMEOUT_MS ?? 60000) });

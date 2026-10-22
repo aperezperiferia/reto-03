@@ -17,7 +17,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = join(__dirname, "..");
 
-loadEnv({ path: join(ROOT, ".env") });
+const envLoad = loadEnv({ path: join(ROOT, ".env") });
+if (!process.env.OPENAI_API_KEY?.trim()) {
+  console.warn(
+    "[api] OPENAI_API_KEY vacía o ausente en .env — el chat fallará hasta que agregues tu clave y reinicies.",
+  );
+} else if (envLoad.error) {
+  console.warn("[api] No se pudo leer .env:", envLoad.error.message);
+}
 
 function getLlm(): LlmAdapter {
   return createOpenAiAdapter();
